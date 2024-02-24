@@ -1,10 +1,12 @@
 package com.nhnacademy.springboot.gateway.controller;
 
 import com.nhnacademy.springboot.gateway.adaptor.AccountAdapter;
+import com.nhnacademy.springboot.gateway.dto.MemberProfileDto;
 import com.nhnacademy.springboot.gateway.dto.request.LoginRequestDto;
 import com.nhnacademy.springboot.gateway.dto.request.MemberRegisterRequest;
 import com.nhnacademy.springboot.gateway.dto.response.MemberResponseDto;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -62,9 +64,16 @@ public class AccountController {
 
 
     @PutMapping("/status")
-    public String changeStatus(){
-        return "redirect:/project/projects";
+    public String changeStatus(@RequestParam("status") String status){
+        accountAdapter.changeStatus(status);
+        return "redirect:/projects";
     }
 
+    @GetMapping("/profile")
+    public String memberProfile(Model model){
+        MemberProfileDto member =  accountAdapter.getMemberProfile();
+        model.addAttribute("profile", accountAdapter.getMemberProfile());
+        return "account/profile";
+    }
 
 }

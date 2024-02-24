@@ -64,9 +64,11 @@ public class ProjectController {
 
     // todo : 프로젝트 생성
     // 프로젝트 생성 페이지?
-    @PostMapping("")
+    @PostMapping
     public String createProject(ProjectRegisterRequest projectRegisterRequest) {
-        projectAdapter.createProject(projectRegisterRequest);
+        System.out.println(projectRegisterRequest.getProjectStatusId());
+        System.out.println(projectRegisterRequest.getName());
+        //projectAdapter.createProject(projectRegisterRequest);
         return "redirect:/projects";
     }
 
@@ -83,6 +85,10 @@ public class ProjectController {
         return "redirect:/projects/" + projectId + "/tasks/" + taskId + "/comments";
     }
 
+    @GetMapping("/settings")
+    public String projectSettings() {
+        return "project/settings";
+    }
 
 
 

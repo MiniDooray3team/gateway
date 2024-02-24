@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/css/adminlte.min.css">
+</head>
+<body class="sidebar-mini layout-footer-fixed" style="height: auto;">
+<div class="row">
+    <h2>프로젝트 명</h2>
+    <div class="card col-md-3">
+
+        <div class="d-flex justify-content-between">
+            <h5 class="card-header">멤버 목록</h5>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#invite-member-modal">
+                멤버 초대
+            </button>
+            <div class="modal fade" id="invite-member-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">초대할 멤버 아이디</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form>
+                        <div class="modal-body">
+                            <input type="text" name="name" id="memberId">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                            <button type="button" class="btn btn-primary">등록</button>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body">
+            <ul class="list-group">
+            <li class="list-group-item">멤버 1</li>
+            <li class="list-group-item">멤버 1</li>
+            <li class="list-group-item">멤버 1</li>
+            <li class="list-group-item">멤버 1</li>
+        </ul>
+        </div>
+    </div>
+
+    <div class="card col-md-3">
+        <div class="d-flex justify-content-between">
+            <h5 class="card-header">태그</h5>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tag-register-modal">
+                태그 등록
+            </button>
+            <div class="modal fade" id="tag-register-modal" tabindex="-1" aria-labelledby="tag-register-label" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="tag-register-label">태그 등록</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form>
+                            <div class="modal-body">
+                                <input type="text" name="name" id="tagName">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                                <button type="button" class="btn btn-primary">등록</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <ul class="list-group">
+                <li class="list-group-item">태그 1</li>
+                <li class="list-group-item">태그 1</li>
+                <li class="list-group-item">태그 1</li>
+                <li class="list-group-item">태그 1</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="card col-3">
+        <div class="d-flex justify-content-between">
+            <h5 class="card-header">마일스톤</h5>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#milestone-register-modal">
+                마일스톤 등록
+            </button>
+            <div class="modal fade" id="milestone-register-modal" tabindex="-1" aria-labelledby="milestone-register-label" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="milestone-register-label">마일스톤 등록</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form>
+                            <div class="modal-body">
+                                <input type="text" name="name" id="milestoneName">
+                                <br>
+                                <hr>
+                                <b>기간 설정</b>
+                                <br>
+                                <input type="date" name="startAt" id="start-date" required>
+                                ~
+                                <input type="date" name="endAt" id="end-date" required>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                                <button type="button" class="btn btn-primary">등록</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <div class="d-flex justify-content-between">
+                        <b> 마일스톤 1</b>
+                        <b> 2020-10-26 ~ 2020-10-28</b>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    <div class="d-flex justify-content-between">
+                        <b> 마일스톤 1</b>
+                        <b> 2020-10-26 ~ 2020-10-28</b>
+                    </div>
+                </li>
+                <li class="list-group-item">
+                    <div class="d-flex justify-content-between">
+                        <b> 마일스톤 1</b>
+                        <b> 2020-10-26 ~ 2020-10-28</b>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/js/adminlte.min.js"></script>
+</body>
+</html>
