@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/js/adminlte.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/css/adminlte.min.css">
+</head>
+
+
+<body class="login-page" style="min-height: 496.781px;">
+
+<div class="login-box">
+    <div class="login-logo">
+        <b>미니 두레이 3팀</b>
+    </div>
+
+    <div class="card">
+        <div class="card-body login-card-body">
+            <p class="login-box-msg"></p>
+            <b class="text-center" th:text="${message}"></b>
+
+            <form action="/account/login" method="post">
+                <div class="input-group mb-3">
+                        <input type="text" name="memberId" class="form-control" placeholder="ID">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-envelope"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group mb-3">
+                        <input type="password" name="password" class="form-control" placeholder="Password">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-lock"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+
+
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary btn-block">로그인</button>
+                    </div>
+
+                </div>
+            </form>
+            <div class="social-auth-links text-center mb-3">
+
+                <a href="/account/register" class="btn btn-block btn-danger">
+                    회원가입
+                </a>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+
+</body>
+
+
+</html>
