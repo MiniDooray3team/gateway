@@ -57,7 +57,7 @@
                                     <span th:text="${project.getName()}"></span>
                                 </p>
                             </a>
-                            <button class="btn btn-sm btn-warning">설정</button>
+                            <button class="btn btn-sm btn-warning" th:onclick="'window.location.href=\'/projects/' + ${project.getId()} + '/settings' +  '\''">설정</button>
                         </div>
 
                 </ul>
@@ -83,50 +83,32 @@
         <section class="content">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-md-3" th:if="${tasks != null and not #lists.isEmpty(tasks)}">
+                    <div class="col-md-3" th:if="${selectedProject != null}">
                         <!--                    <div class="col-md-3">-->
                         <div class="card card-default">
                             <div class="card-header">
                                 <div class="d-flex justify-content-between">
                                     <h3 class="card-title">업무 목록</h3>
-                                    <button class="btn btn-sm btn-primary"> 업무 등록</button>
+                                    <button class="btn btn-sm btn-primary" data-bs-toggle="modal"
+                                            data-bs-target="#task-register-modal"> 업무 등록</button>
                                 </div>
                             </div>
-                            <div class="card-body">
+                            <div class="card-body"  th:if="${tasks != null and not #lists.isEmpty(tasks)}">
                                 <hr>
                                 <th:block th:each="task : ${tasks}">
-                                    <blockquote class="quote-success">
+                                    <blockquote th:classappend="${'quote-' + (task.getTaskStatus().getId() eq 1 ? 'success' : (task.getTaskStatus().getId() eq 2 ? 'primary' : (task.getTaskStatus().getId() eq 3 ? 'danger' : '')))}">
                                         <div class="d-flex justify-content-between">
-                                            <h5 th:text="${task.getTaskName()}"
-                                                onclick="window.location.href='/projects/1/tasks/1'"
+                                            <h5 th:text="${task.getName()}"
+                                                th:onclick="'window.location.href=\'/projects/' + ${selectedProject.getId()} + '/tasks/' + ${task.getId()} + '\''"
                                                 style="cursor: pointer;"></h5>
-                                            <p class="text-right" th:text="${task.taskStatus}"></p>
+                                            <p class="text-right" th:text="${task.getTaskStatus().getName()}"></p>
                                         </div>
-                                        <small th:text="${task.taskMileStone}"></small>
+                                        <small th:text="${task.getMileStone()}"></small>
                                         <br>
                                         <small>#태그1 #태그2 #태그3</small>
                                     </blockquote>
-
                                     <hr>
                                 </th:block>
-                                <blockquote>
-                                    <h5>태스크 이름</h5>
-                                    <p>프로젝트 이름/ 등록자</p>
-                                    <small>Someone famous in <cite title="Source Title">Source Title</cite></small>
-                                </blockquote>
-                                <hr>
-                                <blockquote class="quote-success">
-                                    <h5>태스크 이름</h5>
-                                    <p>프로젝트 이름/ 등록자</p>
-                                    <small>Someone famous in <cite title="Source Title">Source Title</cite></small>
-                                </blockquote>
-                                <hr>
-                                <blockquote class="quote-danger">
-                                    <h5>태스크 이름</h5>
-                                    <p>프로젝트 이름/ 등록자</p>
-                                    <small>Someone famous in <cite title="Source Title">Source Title</cite></small>
-                                </blockquote>
-                                <hr>
                             </div>
                         </div>
 
@@ -137,46 +119,36 @@
                             <div class="card-header">
                                 <div class="user-block">
                                     <span class="username"><a href="#" th:text="${task.getName()}"></a></span>
-                                    <span class="description">등록자 : 김재혁 / 등록일 : 2020-02-01 7:30</span>
+                                    <span class="description" th:text="${'등록자 : ' + task.getAdminId()}"></span>
                                     <span class="description"
-                                          th:text="${#temporals.format(task.getCreatedAt(), 'yyyy-MM-dd HH:mm')}">등록자 : 김재혁 / 등록일 : 2020-02-01 7:30</span>
+                                          th:text="${#temporals.format(task.getCreatedAt(), 'yyyy-MM-dd HH:mm')}"></span>
                                 </div>
 
 
                             </div>
 
                             <div class="card-body">
-                                <p>태스크 내용</p>
                                 <p th:text="${task.getContent()}"></p>
-                                <button type="button" class="btn btn-default btn-sm"><i class="fas fa-share"></i>수정
+                                <button type="button" class="btn btn-default btn-sm" data-bs-toggle="modal"
+                                        data-bs-target="#task-update-modal"><i class="fas fa-share"></i>수정
                                 </button>
                                 <button type="button" class="btn btn-default btn-sm"><i class="far fa-thumbs-up"></i>삭제
                                 </button>
-                                <span class="float-right text-muted">2 코멘트</span>
+                                <span class="float-right text-muted">[[${comments.size()}]] 코멘트</span>
                             </div>
 
                             <div class="card-footer card-comments">
 
-                                <div class="card-comment">
-                                    <div class="comment-text">
-                                        <span class="username">코멘트 작성자<span class="text-muted float-right">2020-02-02 8:03</span>
-                                        </span>
-                                        코멘트내용<br>
-                                        It is a long established fact that a reader will be distracted
-                                        by the readable content of a page when looking at its layout.
-                                    </div>
-                                </div>
+                                <th:block th:each="comment : ${comments}">
+                                    <div class="card-comment">
+                                        <div class="comment-text row">
+                                             <span class="username col-md-3" th:text="${comment.getWriterId()}"></span>
+                                             <span class="text-muted float-right col-md-3 ms-auto" th:text="${#temporals.format(comment.getCreateAt(), 'yyyy-MM-dd HH:mm')}"></span>
+                                             <p th:text="${comment.getContent()}"></p>
+                                        </div>
 
-                                <div class="card-comment">
-
-                                    <div class="comment-text">
-                                        <span class="username">코멘트 작성자<span class="text-muted float-right">2020-02-02 8:03</span>
-                                        </span>
-                                        코멘트내용<br>
-                                        It is a long established fact that a reader will be distracted
-                                        by the readable content of a page when looking at its layout.
                                     </div>
-                                </div>
+                                </th:block>
                             </div>
 
                             <div class="card-footer">
@@ -240,6 +212,88 @@
     </div>
 </div>
 
+<div class="modal fade" id="task-register-modal" tabindex="-1" aria-labelledby="task-register-modal"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="task-register-modal-label">태스크 등록</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form th:if="${selectedProject != null}" th:action="@{'/projects/' + ${selectedProject.getId()} +'/tasks'}" method="post">
+                <div class="modal-body">
+
+                    <div class="mb-3">
+                        <label for="projectName" class="form-label">
+                            태스크 이름
+                        </label>
+                        <input type="text" name="name" id="taskName">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                        <button type="submit" class="btn btn-primary">등록</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="task-update-modal" tabindex="-1" aria-labelledby="task-update-modal"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="task-update-modal-label">태스크 수정</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form th:if="${task != null}" th:action="@{'/projects/' + ${selectedProject.getId()} +'/tasks/' + ${task.getId()} }" th:method="PUT">
+                <div class="modal-body">
+
+                    <div class="mb-3">
+                        <label for="projectName" class="form-label">
+                        </label>
+                        <input type="hidden" th:value="${task.getId()}" name="id">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">제목 수정</span>
+                            <input type="text" aria-label="제목" name="name" th:value="${task.getName()}">
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">내용 수정</span>
+                            <textarea class="form-control" aria-label="태스크 내용 수정" th:value="${task.getContent()}"></textarea>
+                        </div>
+
+                        <div class="input-group mb-3">
+
+                            <div class="col-12">
+
+                                <div class="form-check form-check-inline">
+
+                                    <input type="radio" id="active" name="statusId" th:checked="${task.getTaskStatus().getId() == 1}" value="1" class="form-check-input">
+                                    <label for="active" class="form-check-label">할 일</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" id="inactive" name="statusId" th:checked="${task.getTaskStatus().getId()== 2}" value="2" class="form-check-input">
+                                    <label for="inactive" class="form-check-label">진행중</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" id="withdrawn" name="statusId" th:checked="${task.getTaskStatus().getId() == 3}" value="3" class="form-check-input">
+                                    <label for="withdrawn" class="form-check-label">완료</label>
+                                </div>
+                            </div>
+                        </div>
+<!--                        <input type="text" name="content" id="taskContent">-->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                        <button type="submit" class="btn btn-primary">등록</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
     <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/js/adminlte.min.js"></script>
 </body>
 </html>

@@ -1,18 +1,19 @@
 package com.nhnacademy.springboot.gateway.controller;
 
+import com.fasterxml.jackson.databind.annotation.JsonAppend;
 import com.nhnacademy.springboot.gateway.adaptor.ProjectAdapter;
+import com.nhnacademy.springboot.gateway.domain.Comment;
+import com.nhnacademy.springboot.gateway.domain.Project;
 import com.nhnacademy.springboot.gateway.domain.Task;
 import com.nhnacademy.springboot.gateway.domain.TaskHeader;
 import com.nhnacademy.springboot.gateway.dto.request.ProjectRegisterRequest;
 import com.nhnacademy.springboot.gateway.dto.request.TaskRegisterRequest;
+import com.nhnacademy.springboot.gateway.dto.request.TaskUpdateRequest;
 import com.nhnacademy.springboot.gateway.dto.response.ProjectResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -36,8 +37,10 @@ public class ProjectController {
 
         List<ProjectResponseDto> projectResponseDtoList = projectAdapter.getProjects();
         List<TaskHeader> taskHeaders = projectAdapter.getProjectTaskHeaders(projectId);
+        Project project = projectAdapter.getProject(projectId);
 
         model.addAttribute("projects", projectResponseDtoList);
+        model.addAttribute("selectedProject", project);
         model.addAttribute("tasks", taskHeaders);
         return "project/projects";
     }
@@ -46,13 +49,19 @@ public class ProjectController {
     public String projectTask(@PathVariable("projectId") Long projectId, @PathVariable("taskId") Long taskId, Model model) {
         List<ProjectResponseDto> projectResponseDtoList = projectAdapter.getProjects();
         List<TaskHeader> taskHeaders = projectAdapter.getProjectTaskHeaders(projectId);
+        List<Comment> taskComments = projectAdapter.getTaskComments(projectId, taskId);
+        Project project = projectAdapter.getProject(projectId);
         Task task = projectAdapter.getProjectTask(projectId, taskId);
 
         model.addAttribute("projects", projectResponseDtoList);
         model.addAttribute("tasks", taskHeaders);
         model.addAttribute("task", task);
+        model.addAttribute("selectedProject", project);
+        model.addAttribute("comments", taskComments);
         return "project/projects";
     }
+
+
 
 
     //todo : 프로젝트 생성 페이지
@@ -62,13 +71,9 @@ public class ProjectController {
     }
 
 
-    // todo : 프로젝트 생성
-    // 프로젝트 생성 페이지?
     @PostMapping
     public String createProject(ProjectRegisterRequest projectRegisterRequest) {
-        System.out.println(projectRegisterRequest.getProjectStatusId());
-        System.out.println(projectRegisterRequest.getName());
-        //projectAdapter.createProject(projectRegisterRequest);
+        projectAdapter.createProject(projectRegisterRequest);
         return "redirect:/projects";
     }
 
@@ -85,12 +90,18 @@ public class ProjectController {
         return "redirect:/projects/" + projectId + "/tasks/" + taskId + "/comments";
     }
 
-    @GetMapping("/settings")
-    public String projectSettings() {
+    @GetMapping("{projectId}/settings")
+    public String projectSettings(@PathVariable("projectId") Long projectId, Model model) {
+        Project project = projectAdapter.getProject(projectId);
+        model.addAttribute("project", project);
         return "project/settings";
     }
 
-
+    @PutMapping("{projectId}/tasks/{taskId}")
+    public String updateTask(@PathVariable("projectId") Long projectId, @PathVariable("taskId") Long taskId, TaskUpdateRequest taskUpdateRequest) {
+        projectAdapter.updateProjectTask(projectId, taskId, taskUpdateRequest);
+        return "redirect:/projects/" + projectId + "/tasks /" + taskId;
+    }
 
 
 

@@ -10,9 +10,14 @@ import java.util.List;
 
 public interface ProjectAdapter {
 
+      List<ProjectResponseDto> getProjects();
+
+      Project getProject(Long projectId);
       void createProject(ProjectRegisterRequest projectRegisterRequest);
 
-      List<ProjectResponseDto> getProjects();
+      void deleteProject(Long projectId);
+
+
 
 
       // 프로젝트의 태스크 미리보기 리스트
